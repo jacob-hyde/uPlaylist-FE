@@ -109,6 +109,7 @@ export default {
     img {
       border-radius: 8px;
       max-width: 100%;
+      max-height: 200px;
     }
     h2, h4 {
       margin-bottom: 10px;
