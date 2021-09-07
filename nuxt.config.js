@@ -51,6 +51,7 @@ export default {
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
     "@nuxtjs/auth-next",
+    "@nuxtjs/sentry",
     [
       'nuxt-stripe-module',
       {
@@ -72,6 +73,15 @@ export default {
 
   axios: {
     baseURL: process.env.API_URL,
+  },
+
+  sentry: {
+    dsn: process.env.SENTRY_DSN,
+    publishRelease: true,
+    sourceMapStyle: "hidden-source-map",
+    config: {
+      release: process.env.SENTRY_RELEASE,
+    },
   },
 
   auth: {

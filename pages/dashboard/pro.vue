@@ -19,7 +19,10 @@
                 <li>Prices start at $5 instead of $1</li>
               </ul>
               <div class="text-center mt-4">
-                <v-btn color="primary" @click="dialog = true">Sign Up</v-btn>
+                <v-btn v-if="!$auth.user.subscribed" color="primary" @click="dialog = true">Sign Up</v-btn>
+                <v-btn v-else color="red" @click="cancelSubscription">{{
+                  $auth.user.subscription_ends_at ? 'Ends ' + formatEndDate($auth.user.subscription_ends_at) : 'Cancel Subscription'
+                }}</v-btn>
               </div>
             </v-card-text>
           </v-card>
@@ -51,6 +54,7 @@
             :payment-options="[`stripe`]"
             type="curatorsubscription"
             :price="9.99"
+            payment-update-url="payment"
           />
         </v-card-text>
       </v-card>
@@ -59,6 +63,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import Payment from '@/components/Payment';
 export default {
   components: {
@@ -72,6 +77,20 @@ export default {
       termConditionsUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
       policyUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
     }
+  },
+  methods: {
+    async cancelSubscription () {
+      try {
+        await this.$axios.delete('subscription/' + this.$auth.user.subscription_id)
+        await this.$auth.fetchUser();
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.log(err);
+      }
+    },
+    formatEndDate (date) {
+      return moment(date).format('MMMM Do YYYY');
+    },
   },
 }
 </script>
