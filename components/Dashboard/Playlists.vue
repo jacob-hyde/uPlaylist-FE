@@ -94,6 +94,7 @@ export default {
     priceDialog (val) {
       if (!val) {
         this.price = this.$auth.user.price
+        this.genre_ids = null
       }
     },
   },
@@ -126,6 +127,7 @@ export default {
       this.id = playlist.id;
       if (playlist.curator_playlist) {
         this.price = playlist.price;
+        this.genre_ids = playlist.genres.map(g => g.id);
       }
       this.priceDialog = true;
     },

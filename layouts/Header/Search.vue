@@ -18,7 +18,7 @@
     <template #item="{ item }">
         <v-list-item
           class="cursor-pointer"
-          @click="showItem(item.type.raw, item.id.raw)"
+          @click="showItem(item)"
         >
           <v-list-item-avatar class="square">
             <v-img
@@ -60,6 +60,9 @@ export default {
       const {data: {data}} = await this.$axios.get(`curator/playlist/search?search=${val}`)
       this.items = data;
       this.loading = false;
+    },
+    showItem (playlist) {
+      this.$router.push(`/playlist/${playlist.slug}`)
     },
   }
 }
