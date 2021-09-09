@@ -20,16 +20,17 @@
               <h2 class="h2">{{ featured.name }}</h2>
               <h4 class="h4">{{ featuredGenres }}</h4>
               <div class="boxed-container">
-                <span class="boxed">{{ featured.placement }} Placement</span>
+                <span class="boxed">{{ featured.placement }}% Placement</span>
                 <span class="boxed">{{ featured.followers }} Followers</span>
               </div>
               <div class="mt-4">
-                <v-btn color="primary">
+                <v-btn v-if="!isInCart(featured.id)" color="primary" @click="ADD_TO_CART(featured)">
                   <v-icon>
                     mdi-cart
                   </v-icon>
                   &nbsp;{{ featured.price | centsToDollar }}
                 </v-btn>
+                <v-btn v-else color="red" @click="REMOVE_FROM_CART(featured)">Remove From Cart</v-btn>
               </div>
             </v-col>
           </v-row>
@@ -40,6 +41,7 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   async asyncData ({ $axios }) {
     try {
@@ -53,6 +55,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      cart: 'cart/getCart',
+    }),
     featuredGenres () {
       const genres = this.featured.genres.reduce((accum, v) => {
         return accum + v.name + ', '
@@ -73,7 +78,16 @@ export default {
         this.$refs.header.style.backgroundImage = 'url(/img/header.jpg)'
         break;
     }
-  }
+  },
+  methods: {
+    ...mapMutations({
+      ADD_TO_CART: 'cart/ADD_TO_CART',
+      REMOVE_FROM_CART: 'cart/REMOVE_FROM_CART',
+    }),
+    isInCart (id) {
+      return this.cart.findIndex(v => v.id === id) !== -1
+    }
+  },
 }
 </script>
 

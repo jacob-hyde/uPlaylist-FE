@@ -14,16 +14,17 @@
               <h1 class="h1">{{ playlist.name }}</h1>
               <h4 class="h4">{{ genres }}</h4>
               <div class="boxed-container">
-                <span class="boxed">{{ playlist.placement }} Placement</span>
+                <span class="boxed">{{ playlist.placement }}% Placement</span>
                 <span class="boxed">{{ playlist.followers }} Followers</span>
               </div>
               <div class="mt-4">
-                <v-btn color="primary">
+                <v-btn v-if="!isInCart(playlist.id)" color="primary" @click="ADD_TO_CART(playlist)">
                   <v-icon>
                     mdi-cart
                   </v-icon>
                   &nbsp;{{ playlist.price | centsToDollar }}
                 </v-btn>
+                <v-btn v-else color="red" @click="REMOVE_FROM_CART(playlist)">Remove From Cart</v-btn>
               </div>
             </v-col>
           </v-row>
@@ -64,6 +65,7 @@
 </template>
 
 <script>
+import { mapMutations, mapGetters } from 'vuex'
 export default {
   async asyncData({ params, $axios }) {
     try {
@@ -77,11 +79,23 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      cart: 'cart/getCart',
+    }),
     genres () {
       const genres = this.playlist.genres.reduce((accum, v) => {
         return accum + v.name + ', '
       }, '')
       return genres.slice(0, -2)
+    },
+  },
+  methods: {
+    ...mapMutations({
+      ADD_TO_CART: 'cart/ADD_TO_CART',
+      REMOVE_FROM_CART: 'cart/REMOVE_FROM_CART',
+    }),
+    isInCart (id) {
+      return this.cart.findIndex(v => v.id === id) !== -1
     },
   },
 }

@@ -55,6 +55,7 @@
             type="curatorsubscription"
             :price="9.99"
             payment-update-url="payment"
+            @payment-success="onPaymentSuccess"
           />
         </v-card-text>
       </v-card>
@@ -83,6 +84,7 @@ export default {
       try {
         await this.$axios.delete('subscription/' + this.$auth.user.subscription_id)
         await this.$auth.fetchUser();
+        this.$toast.success('Subscription Canceled!');
       } catch (err) {
         // eslint-disable-next-line no-console
         console.log(err);
@@ -90,6 +92,10 @@ export default {
     },
     formatEndDate (date) {
       return moment(date).format('MMMM Do YYYY');
+    },
+    onPaymentSuccess () {
+      this.$auth.fetchUser();
+      this.$toast.success('Subscription Started!');
     },
   },
 }

@@ -139,6 +139,7 @@ export default {
       try {
         await this.$axios.delete(`curator/playlist/${playlist.id}`);
         this.getPlaylists();
+        this.$toast.success('Playlist Removed');
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);
@@ -152,6 +153,7 @@ export default {
           genres: this.genre_ids,
         })
         this.getPlaylists();
+        this.$toast.success('Playlist Saved!');
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);

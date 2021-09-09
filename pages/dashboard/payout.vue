@@ -29,6 +29,7 @@ export default {
       try {
         await this.$axios.post('payment/payout');
         await this.$auth.fetchUser();
+        this.$toast.success('Payout successful!');
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err);

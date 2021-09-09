@@ -14,6 +14,7 @@
           payment-url="curator/playlist/promote"
           payment-update-url="payment"
           :payment-data="{id: id, date: date}"
+          @payment-success="onPaymentSuccess"
         />
       </v-card-text>
     </v-card>
@@ -50,7 +51,11 @@ export default {
     },
     disabledDates (date) {
       return !this.datesTaken.includes(moment(date).format('YYYY-MM-DD')) && date >= new Date().toISOString().substr(0, 10)
-    }
+    },
+    onPaymentSuccess () {
+      this.dialog = false;
+      this.$toast.success('Purchase Successful!')
+    },
   }
 }
 </script>

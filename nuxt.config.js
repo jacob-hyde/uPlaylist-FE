@@ -33,6 +33,7 @@ export default {
     "@/plugins/filters.js",
     "plugins/validationMixin",
     { src: "~/plugins/paypal.js", ssr: false, mode: "client" },
+    { src: '~/plugins/persistedState.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -50,6 +51,7 @@ export default {
   modules: [
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
+    '@nuxtjs/toast',
     "@nuxtjs/auth-next",
     "@nuxtjs/sentry",
     [
@@ -73,6 +75,10 @@ export default {
 
   axios: {
     baseURL: process.env.API_URL,
+  },
+
+  toast: {
+    position: 'top-right',
   },
 
   sentry: {
