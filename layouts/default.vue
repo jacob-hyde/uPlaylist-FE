@@ -11,11 +11,52 @@
             <nuxt-link to="/" class="d-flex">
               <img src="/img/logo.png" alt="uPlaylist Logo" height="56px" class="mr-4" />
             </nuxt-link>
-            <v-badge :content="cart.length" :value="cart.length" color="red" overlap>
-              <v-btn color="primary" rounded @click="openOrderModal">
-                <v-icon>mdi-cart</v-icon>
-              </v-btn>
-            </v-badge>
+            <v-menu offset-y>
+              <template v-slot:activator="{ on, attrs }">
+                <v-badge :content="cart.length" :value="cart.length" color="red" overlap>
+                  <v-btn 
+                    dark
+                    v-bind="attrs"
+                    v-on="on" 
+                    color="primary"
+                    rounded
+                  >
+                    <v-icon>mdi-cart</v-icon>
+                  </v-btn>
+                </v-badge>
+              </template>
+              <v-card>
+                <v-card-text>
+                  <v-list three-line>
+                    <v-list-item
+                      v-for="(item, index) in cart"
+                      :key="index"
+                    >
+                      <v-list-item-avatar>
+                        <v-img :src="item.image_url"></v-img>
+                      </v-list-item-avatar>
+                      <v-list-item-content>
+                        <v-list-item-title>{{ item.name }}</v-list-item-title>
+                        <v-list-item-subtitle> {{ item.price | centsToDollar }}</v-list-item-subtitle>
+                      </v-list-item-content>
+                    </v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title>Total: {{ total | centsToDollar }}</v-list-item-title>
+                      </v-list-item-content>
+                      <v-list-item-actions>
+                        <v-btn 
+                          dark
+                          color="primary"
+                          rounded
+                          @click="openOrderModal"
+                        >
+                          Checkout&nbsp;<v-icon>mdi-cart</v-icon>
+                        </v-btn>
+                      </v-list-item-actions>
+                  </v-list>
+                </v-card-text>
+              </v-card>
+            </v-menu>
           </v-col>
           <v-spacer class="hidden-md-and-up"></v-spacer>
         </v-row>
@@ -41,6 +82,7 @@
 import { mapGetters } from 'vuex'
 import Search from "@/layouts/Header/Search.vue"
 import OrderModal from "@/components/OrderModal/OrderModal.vue";
+
 export default {
   components: {
     Search,
@@ -50,6 +92,12 @@ export default {
     ...mapGetters({
       cart: 'cart/getCart',
     }),
+    total() {
+      return this.cart.reduce((accum, val) => {
+        accum += val.price
+        return accum
+      }, 0)
+    },
   },
   methods: {
     openOrderModal() {
