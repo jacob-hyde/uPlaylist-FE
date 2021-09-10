@@ -34,7 +34,7 @@
                       :key="index"
                     >
                       <v-list-item-avatar>
-                        <v-img :src="item.image_url"></v-img>
+                        <v-img :src="item.img_url"></v-img>
                       </v-list-item-avatar>
                       <v-list-item-content>
                         <v-list-item-title>{{ item.name }}</v-list-item-title>
