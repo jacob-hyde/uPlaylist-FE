@@ -11,6 +11,7 @@
             <nuxt-link to="/" class="d-flex">
               <img src="/img/logo.png" alt="uPlaylist Logo" height="56px" class="mr-4" />
             </nuxt-link>
+            <v-btn color="primary" link to="/register" class="mr-4 d-md-flex d-sm-none d-xs-none">Become a Curator</v-btn>
             <v-badge :content="cart.length" :value="cart.length" color="red" overlap>
               <v-btn color="primary" rounded @click="openOrderModal">
                 <v-icon>mdi-cart</v-icon>
@@ -26,11 +27,14 @@
     </v-main>
     <v-footer>
       <v-row>
-        <v-spacer></v-spacer>
-        <v-col cols="auto">
+        <v-col cols="12" class="text-center pb-0">
           <img src="/img/logo-dark.png" alt="uPlaylist Logo" height="56px"/>
         </v-col>
-        <v-spacer></v-spacer>
+        <v-col cols="12" class="text-center pt-0">
+          <nuxt-link to="/login">Login</nuxt-link>
+          |
+          <nuxt-link to="/help">Help</nuxt-link>
+        </v-col>
       </v-row>
     </v-footer>
     <order-modal ref="orderModal" />

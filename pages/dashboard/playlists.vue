@@ -34,6 +34,7 @@ export default {
     Playlists,
   },
   layout: 'dashboard',
+  middleware: 'auth',
   data () {
     return {
       spotify_connected: this.$auth.user.spotify_connected,

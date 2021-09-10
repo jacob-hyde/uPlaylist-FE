@@ -68,11 +68,14 @@
     </v-main>
     <v-footer>
       <v-row>
-        <v-spacer></v-spacer>
-        <v-col cols="auto">
+        <v-col cols="12" class="text-center pb-0">
           <img src="/img/logo-dark.png" alt="uPlaylist Logo" height="56px"/>
         </v-col>
-        <v-spacer></v-spacer>
+        <v-col cols="12" class="text-center pt-0">
+          <nuxt-link to="/login">Login</nuxt-link>
+          |
+          <nuxt-link to="/curator-help">Help</nuxt-link>
+        </v-col>
       </v-row>
     </v-footer>
   </v-app>

@@ -74,6 +74,8 @@ export default {
       try {
         const {data: {data}} = await this.$axios.post('auth/register', this.form)
         await this.$auth.setUserToken(data.access_token)
+        await this.$auth.fetchUser();
+        this.$router.push('/dashboard/playlists');
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error)

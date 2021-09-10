@@ -71,6 +71,7 @@ export default {
     Payment,
   },
   layout: 'dashboard',
+  middleware: 'auth',
   data () {
     return {
       dialog: false,

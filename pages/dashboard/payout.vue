@@ -24,6 +24,7 @@
 <script>
 export default {
   layout: 'dashboard',
+  middleware: 'auth',
   methods: {
     async payout() {
       try {

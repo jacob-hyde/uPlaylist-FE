@@ -63,6 +63,7 @@
 import _ from 'lodash';
 export default {
   layout: 'dashboard',
+  middleware: 'auth',
   data () {
     return {
       valid: true,
