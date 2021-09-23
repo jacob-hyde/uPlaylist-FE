@@ -1,6 +1,6 @@
 <template>
   <v-app dark>
-    <v-navigation-drawer v-model="drawer" fixed>
+    <v-navigation-drawer v-model="drawer" fixed app>
       <div class="text-center mt-4">
         <h2 class="h2">Dashboard</h2>
       </div>
@@ -50,11 +50,18 @@
     <v-app-bar fixed app>
       <v-container>
         <v-row>
-          <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+          <v-app-bar-nav-icon
+            @click.stop="drawer = !drawer"
+          ></v-app-bar-nav-icon>
           <v-spacer></v-spacer>
           <v-col md="auto" class="py-0 d-flex align-center">
             <nuxt-link to="/" class="d-flex">
-              <img src="/img/logo.png" alt="uPlaylist Logo" height="56px" class="mr-4" />
+              <img
+                src="/img/logo.png"
+                alt="uPlaylist Logo"
+                height="56px"
+                class="mr-4"
+              />
             </nuxt-link>
           </v-col>
           <v-spacer></v-spacer>
@@ -69,12 +76,22 @@
     <v-footer>
       <v-row>
         <v-col cols="12" class="text-center pb-0">
-          <img src="/img/logo-dark.png" alt="uPlaylist Logo" height="56px"/>
+          <img src="/img/logo-dark.png" alt="uPlaylist Logo" height="56px" />
         </v-col>
         <v-col cols="12" class="text-center pt-0">
-          <nuxt-link to="/login">Login</nuxt-link>
+          <a href="#" @click.prevent="logout">Logout</a>
           |
           <nuxt-link to="/curator-help">Help</nuxt-link>
+          |
+          <a
+            href="https://app.termly.io/document/privacy-policy/da5b475c-2858-4d7f-8310-57130372a10d"
+            >Privacy</a
+          >
+          |
+          <a
+            href="https://app.termly.io/document/disclaimer/9fb7b34e-9d3d-4c75-8e61-f842f9ce01cb"
+            >Dislaimer</a
+          >
         </v-col>
       </v-row>
     </v-footer>
@@ -83,10 +100,16 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       drawer: true,
     }
-  }
+  },
+  methods: {
+    logout() {
+      this.$auth.logout()
+      this.$router.push('/')
+    },
+  },
 }
 </script>

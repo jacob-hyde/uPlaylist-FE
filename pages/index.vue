@@ -3,7 +3,9 @@
     <div ref="header" class="header">
       <v-container>
         <h1 class="h1">Largest Playlisting Network</h1>
-        <h3 class="h3">Over 3,000 playlists | One Network | Trusted by 100k+ Artists</h3>
+        <h3 class="h3">
+          Over 3,000 playlists | One Network | Trusted by 100k+ Artists
+        </h3>
       </v-container>
     </div>
     <div class="featured" :style="`background-image: url(${featured.img_url})`">
@@ -11,10 +13,7 @@
         <v-container class="container">
           <v-row align="center">
             <v-col md="4" sm="3" offset-md="2">
-              <img
-                :src="featured.img_url"
-                :alt="featured.name"
-              />
+              <img :src="featured.img_url" :alt="featured.name" />
             </v-col>
             <v-col cols="6">
               <h2 class="h2">{{ featured.name }}</h2>
@@ -24,28 +23,37 @@
                 <span class="boxed">{{ featured.followers }} Followers</span>
               </div>
               <div class="mt-4">
-                <v-btn v-if="!isInCart(featured.id)" color="primary" @click="ADD_TO_CART(featured)">
-                  <v-icon>
-                    mdi-cart
-                  </v-icon>
+                <v-btn
+                  v-if="!isInCart(featured.id)"
+                  color="primary"
+                  @click="ADD_TO_CART(featured)"
+                >
+                  <v-icon> mdi-cart </v-icon>
                   &nbsp;{{ featured.price | centsToDollar }}
                 </v-btn>
-                <v-btn v-else color="red" @click="REMOVE_FROM_CART(featured)">Remove From Cart</v-btn>
+                <v-btn v-else color="red" @click="REMOVE_FROM_CART(featured)"
+                  >Remove From Cart</v-btn
+                >
               </div>
             </v-col>
           </v-row>
         </v-container>
       </div>
     </div>
+    <playlists />
   </div>
 </template>
 
 <script>
 import { mapMutations, mapGetters } from 'vuex'
+import Playlists from '@/components/Playlists.vue'
 export default {
-  async asyncData ({ $axios }) {
+  components: { Playlists },
+  async asyncData({ $axios }) {
     try {
-      const {data: {data}} = await $axios.get('curator/playlist/featured');
+      const {
+        data: { data },
+      } = await $axios.get('curator/playlist/featured')
       return {
         featured: data,
       }
@@ -58,25 +66,42 @@ export default {
     ...mapGetters({
       cart: 'cart/getCart',
     }),
-    featuredGenres () {
+    featuredGenres() {
       const genres = this.featured.genres.reduce((accum, v) => {
         return accum + v.name + ', '
       }, '')
       return genres.slice(0, -2)
     },
   },
-  mounted () {
+  watch: {
+    '$vuetify.breakpoint.name'() {
+      console.log(this.$vuetify.breakpoint.name)
+      switch (this.$vuetify.breakpoint.name) {
+        case 'xs':
+        case 'sm':
+          this.$refs.header.style.backgroundImage = 'url(/img/header-sm.jpg)'
+          break
+        case 'md':
+          this.$refs.header.style.backgroundImage = 'url(/img/header-md.jpg)'
+          break
+        default:
+          this.$refs.header.style.backgroundImage = 'url(/img/header.jpg)'
+          break
+      }
+    },
+  },
+  mounted() {
     switch (this.$vuetify.breakpoint.name) {
       case 'xs':
       case 'sm':
         this.$refs.header.style.backgroundImage = 'url(/img/header-sm.jpg)'
-        break;
+        break
       case 'md':
         this.$refs.header.style.backgroundImage = 'url(/img/header-md.jpg)'
-        break;
+        break
       default:
         this.$refs.header.style.backgroundImage = 'url(/img/header.jpg)'
-        break;
+        break
     }
   },
   methods: {
@@ -84,9 +109,9 @@ export default {
       ADD_TO_CART: 'cart/ADD_TO_CART',
       REMOVE_FROM_CART: 'cart/REMOVE_FROM_CART',
     }),
-    isInCart (id) {
-      return this.cart.findIndex(v => v.id === id) !== -1
-    }
+    isInCart(id) {
+      return this.cart.findIndex((v) => v.id === id) !== -1
+    },
   },
 }
 </script>
@@ -102,7 +127,17 @@ export default {
     text-transform: uppercase;
   }
   @media screen and (max-width: 1264px) {
-    height: 150px;
+    height: 300px;
+    padding-top: 100px;
+    h1 {
+      font-size: 1.5rem;
+    }
+    h3 {
+      font-size: 1rem;
+    }
+  }
+  @media screen and (max-width: 960px) {
+    height: 300px;
     padding-top: 30px;
     text-align: center;
     h1 {
@@ -125,7 +160,8 @@ export default {
       max-width: 100%;
       max-height: 200px;
     }
-    h2, h4 {
+    h2,
+    h4 {
       margin-bottom: 10px;
     }
     .boxed {

@@ -25,6 +25,7 @@
     "moment": "^2.29.1",
     "nuxt": "^2.15.7",
     "nuxt-stripe-module": "^3.2.0",
+    "vue-phone-number-input": "^1.1.10",
     "vuetify": "^2.5.5",
     "vuex-persistedstate": "^4.0.0"
   },
