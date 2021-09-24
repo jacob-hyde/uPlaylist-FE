@@ -30,7 +30,8 @@ export default {
 		'plugins/validationMixin',
 		{ src: '~/plugins/paypal.js', ssr: false, mode: 'client' },
 		{ src: '~/plugins/persistedState.js', ssr: false },
-		{ src: '~/plugins/phoneInput.js' }
+		{ src: '~/plugins/phoneInput.js' },
+		{ src: '~/plugins/echo', mode: 'client' }
 	],
 
 	// Auto import components: https://go.nuxtjs.dev/config-components
