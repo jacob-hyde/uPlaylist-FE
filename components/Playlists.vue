@@ -30,6 +30,9 @@
                 <img :src="item.img_url" height="50px" />
                 <span>
                   {{ item.name }}
+                  <v-icon v-if="item.is_subscribed" color="blue"
+                    >mdi-check-decagram</v-icon
+                  >
                   <br />
                   <span class="small">{{
                     item.genres.map((genre) => genre.name).join(', ')
