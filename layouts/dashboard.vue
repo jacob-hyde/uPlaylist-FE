@@ -92,6 +92,8 @@
             href="https://app.termly.io/document/disclaimer/9fb7b34e-9d3d-4c75-8e61-f842f9ce01cb"
             >Dislaimer</a
           >
+          |
+          <a href="mailto:support@uplaylist.com">Contact</a>
         </v-col>
       </v-row>
     </v-footer>
