@@ -11,7 +11,6 @@
               <h1 class="h1">{{ playlist.name }}</h1>
               <h4 class="h4">{{ genres }}</h4>
               <div class="boxed-container">
-                <span class="boxed">{{ playlist.placement }}% Placement</span>
                 <span class="boxed">{{ playlist.followers }} Followers</span>
               </div>
               <div class="mt-4">

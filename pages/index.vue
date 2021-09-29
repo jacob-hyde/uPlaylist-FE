@@ -19,7 +19,6 @@
               <h2 class="h2">{{ featured.name }}</h2>
               <h4 class="h4">{{ featuredGenres }}</h4>
               <div class="boxed-container">
-                <span class="boxed">{{ featured.placement }}% Placement</span>
                 <span class="boxed">{{ featured.followers }} Followers</span>
               </div>
               <div class="mt-4">
