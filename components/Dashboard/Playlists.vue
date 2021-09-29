@@ -7,41 +7,36 @@
       :items-per-page="25"
     >
       <template #[`item.actions`]="{ item }">
-        <v-btn v-if="!item.curator_playlist" color="primary" @click="openPricingDialog(item)">List Playlist</v-btn>
-        <v-btn v-else color="primary" @click="openPricingDialog(item)">Edit (${{ item.price }})</v-btn>
-        <v-btn v-if="item.curator_playlist" color="primary" @click="promotePlaylist(item)">Promote</v-btn>
-        <v-btn v-if="item.curator_playlist" color="red" @click="removePlaylist(item)">Remove</v-btn>
+        <v-btn
+          v-if="!item.curator_playlist"
+          color="primary"
+          @click="openPricingDialog(item)"
+          >List Playlist</v-btn
+        >
+        <v-btn
+          v-if="item.curator_playlist"
+          color="red"
+          @click="removePlaylist(item)"
+          >Remove</v-btn
+        >
       </template>
     </v-data-table>
     <v-dialog v-model="priceDialog" max-width="300">
       <v-card>
         <v-card-title>
-          <span class="headline">Set Price</span>
+          <span class="headline">Set Genres</span>
         </v-card-title>
         <v-card-text>
-          <v-text-field
-            v-model="price"
-            label="Price"
-            type="number"
-            min="1"
-            step="0.1"
-            :max="$auth.user.price"
-            prepend-icon="mdi-currency-usd"
-            required
-          ></v-text-field>
           <v-select
             ref="select"
             v-model="genre_ids"
-            :items="genres.map(g=>({value:g.id,text:g.name}))"
-            :reduce="genre => genre.id"
+            :items="genres.map((g) => ({ value: g.id, text: g.name }))"
+            :reduce="(genre) => genre.id"
             label="Genres"
             multiple
-        ></v-select>
-          <div class="text-right">
-            <p>Fee: ${{price / 2}}</p>
-          </div>
+          ></v-select>
           <div class="text-center mt-4">
-            <v-btn color="primary" @click="setPrice">Set Price</v-btn>
+            <v-btn color="primary" @click="setPrice">List</v-btn>
           </div>
         </v-card-text>
       </v-card>
@@ -91,79 +86,82 @@ export default {
     }
   },
   watch: {
-    priceDialog (val) {
+    priceDialog(val) {
       if (!val) {
         this.price = this.$auth.user.price
         this.genre_ids = null
       }
     },
   },
-  created () {
-    this.getPlaylists();
-    this.getGenres();
+  created() {
+    this.getPlaylists()
+    this.getGenres()
   },
   methods: {
-    async getPlaylists () {
-      this.loading = true;
+    async getPlaylists() {
+      this.loading = true
       try {
-        const {data: {data}} = await this.$axios.get('spotify/playlists');
-        this.playlists = data;
+        const {
+          data: { data },
+        } = await this.$axios.get('spotify/playlists')
+        this.playlists = data
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
       }
-      this.loading = false;
+      this.loading = false
     },
-    async getGenres () {
+    async getGenres() {
       try {
-        const {data: {data}} = await this.$axios.get('genre');
-        this.genres = data;
+        const {
+          data: { data },
+        } = await this.$axios.get('genre')
+        this.genres = data
       } catch (err) {
         // eslint-disable-next-line no-console
         console.error(err)
       }
     },
-    openPricingDialog (playlist) {
-      this.id = playlist.id;
+    openPricingDialog(playlist) {
+      this.id = playlist.id
       if (playlist.curator_playlist) {
-        this.price = playlist.price;
-        this.genre_ids = playlist.genres.map(g => g.id);
+        this.price = playlist.price
+        this.genre_ids = playlist.genres.map((g) => g.id)
       }
-      this.priceDialog = true;
+      this.priceDialog = true
     },
-    promotePlaylist (playlist) {
-      this.id = playlist.id;
-      this.$refs.promoteModal.openModal();
+    promotePlaylist(playlist) {
+      this.id = playlist.id
+      this.$refs.promoteModal.openModal()
     },
-    async removePlaylist (playlist) {
+    async removePlaylist(playlist) {
       try {
-        await this.$axios.delete(`curator/playlist/${playlist.id}`);
-        this.getPlaylists();
-        this.$toast.success('Playlist Removed');
+        await this.$axios.delete(`curator/playlist/${playlist.id}`)
+        this.getPlaylists()
+        this.$toast.success('Playlist Removed')
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(err);
+        console.error(err)
       }
     },
-    async setPrice () {
+    async setPrice() {
       try {
         await this.$axios.post('curator/playlist', {
           id: this.id,
           price: this.price,
           genres: this.genre_ids,
         })
-        this.getPlaylists();
-        this.$toast.success('Playlist Saved!');
+        this.getPlaylists()
+        this.$toast.success('Playlist Saved!')
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(err);
+        console.error(err)
       }
-      this.priceDialog = false;
-    }
-  }
+      this.priceDialog = false
+    },
+  },
 }
 </script>
 
 <style>
-
 </style>

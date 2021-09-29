@@ -23,17 +23,9 @@
                 <span class="boxed">{{ featured.followers }} Followers</span>
               </div>
               <div class="mt-4">
-                <v-btn
-                  v-if="!isInCart(featured.id)"
-                  color="primary"
-                  @click="ADD_TO_CART(featured)"
-                >
-                  <v-icon> mdi-cart </v-icon>
-                  &nbsp;{{ featured.price | centsToDollar }}
+                <v-btn color="primary" @click="follow(featured)">
+                  Follow
                 </v-btn>
-                <v-btn v-else color="red" @click="REMOVE_FROM_CART(featured)"
-                  >Remove From Cart</v-btn
-                >
               </div>
             </v-col>
           </v-row>
@@ -111,6 +103,18 @@ export default {
     }),
     isInCart(id) {
       return this.cart.findIndex((v) => v.id === id) !== -1
+    },
+    async follow(playlist) {
+      if (!this.$auth.loggedIn) {
+        window.alert('You need to be logged in to follow a playlist')
+        return
+      }
+      try {
+        await this.$axios.put('spotify/follow/' + playlist.id)
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
     },
   },
 }

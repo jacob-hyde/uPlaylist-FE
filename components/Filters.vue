@@ -10,18 +10,6 @@
         outlined
       ></v-text-field>
     </div>
-    <div class="form-group filter money">
-      <label for="price">Price</label>
-      <v-range-slider v-model="form.price" :min="1" :max="25" dense />
-      <p>
-        <span class="float-left"
-          ><span class="text-muted"></span>{{ form.price[0] }}</span
-        >
-        <span class="float-right"
-          ><span class="text-muted"></span>{{ form.price[1] }}</span
-        >
-      </p>
-    </div>
     <div class="form-group filter">
       <label for="followers">Followers</label>
       <v-range-slider v-model="form.followers" :min="100" :max="300000" dense />

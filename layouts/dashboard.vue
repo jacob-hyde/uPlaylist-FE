@@ -5,14 +5,6 @@
         <h2 class="h2">Dashboard</h2>
       </div>
       <v-list nav>
-        <v-list-item link to="/dashboard/orders">
-          <v-list-item-icon>
-            <v-icon color="primary">mdi-clipboard-play</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Orders</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item link to="/dashboard/playlists">
           <v-list-item-icon>
             <v-icon color="primary">mdi-spotify</v-icon>
@@ -21,28 +13,12 @@
             <v-list-item-title>Playlists</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link to="/dashboard/payout">
-          <v-list-item-icon>
-            <v-icon color="primary">mdi-bank</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Payout</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
         <v-list-item link to="/dashboard/account">
           <v-list-item-icon>
             <v-icon color="primary">mdi-account</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>Account</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link to="/dashboard/pro">
-          <v-list-item-icon>
-            <v-icon color="primary">mdi-check-decagram</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>Pro</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -80,18 +56,6 @@
         </v-col>
         <v-col cols="12" class="text-center pt-0">
           <a href="#" @click.prevent="logout">Logout</a>
-          |
-          <nuxt-link to="/curator-help">Help</nuxt-link>
-          |
-          <a
-            href="https://app.termly.io/document/privacy-policy/da5b475c-2858-4d7f-8310-57130372a10d"
-            >Privacy</a
-          >
-          |
-          <a
-            href="https://app.termly.io/document/disclaimer/9fb7b34e-9d3d-4c75-8e61-f842f9ce01cb"
-            >Dislaimer</a
-          >
           |
           <a href="mailto:support@uplaylist.com">Contact</a>
         </v-col>

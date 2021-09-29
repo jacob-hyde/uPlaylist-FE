@@ -12,54 +12,8 @@
             <nuxt-link to="/" class="d-flex">
               <img src="/img/logo.png" alt="uPlaylist Logo" height="56px" class="mr-4" />
             </nuxt-link>
-            <v-btn v-if="$auth.loggedIn && $auth.user && $auth.user.is_curator" color="primary" link to="/dashboard/orders" class="mr-4 d-md-flex d-none d-md-flex">Dashboard</v-btn>
-            <v-btn v-else color="primary" link to="/register" class="mr-4 d-md-flex d-none d-md-flex">Become a Curator</v-btn>
-            <v-menu offset-y>
-              <template #activator="{ on, attrs }">
-                <v-badge :content="cart.length" :value="cart.length" color="red" overlap>
-                  <v-btn
-                    dark
-                    v-bind="attrs"
-                    color="primary"
-                    rounded
-                    v-on="on"
-                  >
-                    <v-icon>mdi-cart</v-icon>
-                  </v-btn>
-                </v-badge>
-              </template>
-              <v-card>
-                <v-card-text>
-                  <v-list three-line>
-                    <v-list-item
-                      v-for="(item, index) in cart"
-                      :key="index"
-                    >
-                      <v-list-item-avatar>
-                        <v-img :src="item.img_url"></v-img>
-                      </v-list-item-avatar>
-                      <v-list-item-content>
-                        <v-list-item-title>{{ item.name }}</v-list-item-title>
-                        <v-list-item-subtitle> {{ item.price | centsToDollar }}</v-list-item-subtitle>
-                      </v-list-item-content>
-                    </v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title>Total: {{ total | centsToDollar }}</v-list-item-title>
-                      </v-list-item-content>
-                      <v-list-item-actions>
-                        <v-btn
-                          dark
-                          color="primary"
-                          rounded
-                          @click="openOrderModal"
-                        >
-                          Checkout&nbsp;<v-icon>mdi-cart</v-icon>
-                        </v-btn>
-                      </v-list-item-actions>
-                  </v-list>
-                </v-card-text>
-              </v-card>
-            </v-menu>
+            <v-btn v-if="$auth.loggedIn && $auth.user && $auth.user.is_curator" color="primary" link to="/dashboard/playlists" class="mr-4 d-md-flex d-none d-md-flex">Dashboard</v-btn>
+            <v-btn v-else color="primary" link to="/register" class="mr-4 d-md-flex d-none d-md-flex">Join Today</v-btn>
           </v-col>
           <v-spacer class="hidden-md-and-up"></v-spacer>
         </v-row>
@@ -75,18 +29,6 @@
         </v-col>
         <v-col cols="12" class="text-center pt-0">
           <nuxt-link to="/login">Login</nuxt-link>
-          |
-          <nuxt-link to="/help">Help</nuxt-link>
-          |
-          <a
-            href="https://app.termly.io/document/privacy-policy/da5b475c-2858-4d7f-8310-57130372a10d"
-            >Privacy</a
-          >
-          |
-          <a
-            href="https://app.termly.io/document/disclaimer/9fb7b34e-9d3d-4c75-8e61-f842f9ce01cb"
-            >Dislaimer</a
-          >
           |
           <a href="mailto:support@uplaylist.com">Contact</a>
         </v-col>

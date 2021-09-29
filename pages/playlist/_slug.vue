@@ -5,10 +5,7 @@
         <v-container class="container">
           <v-row align="center">
             <v-col md="4" sm="3" offset-md="2">
-              <img
-                :src="playlist.img_url"
-                :alt="playlist.name"
-              />
+              <img :src="playlist.img_url" :alt="playlist.name" />
             </v-col>
             <v-col cols="6">
               <h1 class="h1">{{ playlist.name }}</h1>
@@ -18,13 +15,9 @@
                 <span class="boxed">{{ playlist.followers }} Followers</span>
               </div>
               <div class="mt-4">
-                <v-btn v-if="!isInCart(playlist.id)" color="primary" @click="ADD_TO_CART(playlist)">
-                  <v-icon>
-                    mdi-cart
-                  </v-icon>
-                  &nbsp;{{ playlist.price | centsToDollar }}
+                <v-btn color="primary" @click="follow(playlist)">
+                  Follow
                 </v-btn>
-                <v-btn v-else color="red" @click="REMOVE_FROM_CART(playlist)">Remove From Cart</v-btn>
               </div>
             </v-col>
           </v-row>
@@ -38,21 +31,14 @@
           <thead>
             <tr>
               <th></th>
-              <th class="text-left">
-                Name
-              </th>
-              <th class="text-left">
-                Artist
-              </th>
+              <th class="text-left">Name</th>
+              <th class="text-left">Artist</th>
             </tr>
           </thead>
           <tbody>
-            <tr
-              v-for="track in playlist.tracks"
-              :key="track.name"
-            >
-              <td style="padding-top: 10px; padding-bottom: 10px;">
-                <img :src="track.img_url" :alt="track.name" height="70px">
+            <tr v-for="track in playlist.tracks" :key="track.name">
+              <td style="padding-top: 10px; padding-bottom: 10px">
+                <img :src="track.img_url" :alt="track.name" height="70px" />
               </td>
               <td>{{ track.name }}</td>
               <td>{{ track.artist }}</td>
@@ -69,9 +55,11 @@ import { mapMutations, mapGetters } from 'vuex'
 export default {
   async asyncData({ params, $axios }) {
     try {
-      const { data: {data} } = await $axios.get(`curator/playlist/${params.slug}`);
+      const {
+        data: { data },
+      } = await $axios.get(`curator/playlist/${params.slug}`)
       return {
-        playlist: data
+        playlist: data,
       }
     } catch (err) {
       // eslint-disable-next-line no-console
@@ -82,7 +70,7 @@ export default {
     ...mapGetters({
       cart: 'cart/getCart',
     }),
-    genres () {
+    genres() {
       const genres = this.playlist.genres.reduce((accum, v) => {
         return accum + v.name + ', '
       }, '')
@@ -94,8 +82,20 @@ export default {
       ADD_TO_CART: 'cart/ADD_TO_CART',
       REMOVE_FROM_CART: 'cart/REMOVE_FROM_CART',
     }),
-    isInCart (id) {
-      return this.cart.findIndex(v => v.id === id) !== -1
+    isInCart(id) {
+      return this.cart.findIndex((v) => v.id === id) !== -1
+    },
+    async follow(playlist) {
+      if (!this.$auth.loggedIn) {
+        window.alert('You need to be logged in to follow a playlist')
+        return
+      }
+      try {
+        await this.$axios.put('spotify/follow/' + playlist.id)
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
     },
   },
 }
@@ -114,7 +114,8 @@ export default {
       max-width: 100%;
       max-height: 200px;
     }
-    h2, h4 {
+    h2,
+    h4 {
       margin-bottom: 10px;
     }
     .boxed {

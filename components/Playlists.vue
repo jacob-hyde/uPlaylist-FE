@@ -47,17 +47,7 @@
               <span class="boxed"> {{ item.followers }} Followers </span>
             </template>
             <template #[`item.action`]="{ item }">
-              <v-btn
-                v-if="!isInCart(item.id)"
-                color="primary"
-                @click.stop="ADD_TO_CART(item)"
-              >
-                <v-icon> mdi-cart </v-icon>
-                &nbsp;{{ item.price | centsToDollar }}
-              </v-btn>
-              <v-btn v-else color="red" @click.stop="REMOVE_FROM_CART(item)"
-                >Remove</v-btn
-              >
+              <v-btn color="primary" @click.stop="follow(item)">Follow</v-btn>
             </template>
           </v-data-table>
         </v-col>
@@ -106,6 +96,18 @@ export default {
     this.getPlaylists()
   },
   methods: {
+    async follow(playlist) {
+      if (!this.$auth.loggedIn) {
+        window.alert('You need to be logged in to follow a playlist')
+        return
+      }
+      try {
+        await this.$axios.put('spotify/follow/' + playlist.id)
+      } catch (err) {
+        // eslint-disable-next-line no-console
+        console.error(err)
+      }
+    },
     ...mapMutations({
       ADD_TO_CART: 'cart/ADD_TO_CART',
       REMOVE_FROM_CART: 'cart/REMOVE_FROM_CART',

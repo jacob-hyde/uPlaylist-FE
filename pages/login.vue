@@ -13,13 +13,13 @@
               <v-text-field
                 v-model="form.email"
                 label="Email"
-                :rules="[v => !!v || 'Email is required']"
+                :rules="[(v) => !!v || 'Email is required']"
               ></v-text-field>
               <v-text-field
                 v-model="form.password"
                 label="Password"
                 type="password"
-                :rules="[v => !!v || 'Password is required']"
+                :rules="[(v) => !!v || 'Password is required']"
               ></v-text-field>
               <div class="text-center mt-4">
                 <v-btn type="submit" color="primary">Login</v-btn>
@@ -35,18 +35,18 @@
 
 <script>
 export default {
-  data () {
+  data() {
     return {
       valid: true,
       loading: false,
       form: {
         email: '',
         password: '',
-      }
+      },
     }
   },
   methods: {
-    async onSubmit () {
+    async onSubmit() {
       this.$refs.form.validate()
       if (!this.valid) {
         return
@@ -56,7 +56,7 @@ export default {
         await this.$auth.loginWith('local', {
           data: this.form,
         })
-        this.$router.push('/dashboard/orders')
+        this.$router.push('/dashboard/playlists')
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error)
@@ -71,11 +71,10 @@ export default {
         this.validationErrors = this.formatErrors(items)
       }
       this.loading = false
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style>
-
 </style>
