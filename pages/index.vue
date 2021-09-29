@@ -3,9 +3,7 @@
     <div ref="header" class="header">
       <v-container>
         <h1 class="h1">Largest Playlisting Network</h1>
-        <h3 class="h3">
-          Over 3,000 playlists | One Network | Trusted by 100k+ Artists
-        </h3>
+        <h3 class="h3">Discover new Spotify Playlists</h3>
       </v-container>
     </div>
     <div class="featured" :style="`background-image: url(${featured.img_url})`">
