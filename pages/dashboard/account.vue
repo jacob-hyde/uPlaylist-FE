@@ -11,26 +11,32 @@
               <v-text-field
                 v-model="form.first_name"
                 label="First Name"
-                :rules="[v => !!v || 'First Name is required']"
+                :rules="[(v) => !!v || 'First Name is required']"
                 required
               ></v-text-field>
               <v-text-field
                 v-model="form.last_name"
                 label="Last Name"
-                :rules="[v => !!v || 'Last Name is required']"
+                :rules="[(v) => !!v || 'Last Name is required']"
                 required
               ></v-text-field>
               <v-text-field
                 v-model="form.username"
                 label="Username"
-                :rules="[v => !!v || 'Username is required', () => usernameAvailable || 'Username is not available']"
+                :rules="[
+                  (v) => !!v || 'Username is required',
+                  () => usernameAvailable || 'Username is not available',
+                ]"
                 required
                 @keyup="onUsernameKeyup"
               ></v-text-field>
               <v-text-field
                 v-model="form.email"
                 label="Email"
-                :rules="[v => !!v || 'Email is required', v => /.+@.+\..+/.test(v) || 'Email is invalid']"
+                :rules="[
+                  (v) => !!v || 'Email is required',
+                  (v) => /.+@.+\..+/.test(v) || 'Email is invalid',
+                ]"
                 required
               ></v-text-field>
               <v-text-field
@@ -40,16 +46,16 @@
               <v-text-field
                 v-model="form.password_confirmation"
                 label="Password Confirmation"
-                :rules="[v => v === form.password || 'Password Confirmation must match Password']"
-              ></v-text-field>
-              <v-text-field
-                v-model="form.paypal_email"
-                label="Paypal Email"
-                :rules="[v => !!v || 'Paypal Email is required', v => /.+@.+\..+/.test(v) || 'Paypal Email is invalid']"
-                required
+                :rules="[
+                  (v) =>
+                    v === form.password ||
+                    'Password Confirmation must match Password',
+                ]"
               ></v-text-field>
               <div class="text-center mt-4">
-                <v-btn type="submit" color="primary" :disabled="!valid">Save</v-btn>
+                <v-btn type="submit" color="primary" :disabled="!valid"
+                  >Save</v-btn
+                >
               </div>
             </v-form>
           </v-card-text>
@@ -60,11 +66,11 @@
 </template>
 
 <script>
-import _ from 'lodash';
+import _ from 'lodash'
 export default {
   layout: 'dashboard',
   middleware: 'auth',
-  data () {
+  data() {
     return {
       valid: true,
       loading: false,
@@ -76,35 +82,40 @@ export default {
         email: this.$auth.user.email,
         password: null,
         password_confirmation: null,
-        paypal_email: this.$auth.user.paypal_email
-      }
+        paypal_email: this.$auth.user.paypal_email,
+      },
     }
   },
   methods: {
-    onUsernameKeyup: _.debounce(async function() {
-      const { data: { data } } = await this.$axios.post(`auth/username-available`, { username: this.form.username });
-      this.usernameAvailable = data ? data.available : false;
-      this.$refs.form.validate();
+    onUsernameKeyup: _.debounce(async function () {
+      const {
+        data: { data },
+      } = await this.$axios.post(`auth/username-available`, {
+        username: this.form.username,
+      })
+      this.usernameAvailable = data ? data.available : false
+      this.$refs.form.validate()
     }, 400),
-    async onSubmit () {
+    async onSubmit() {
       this.$refs.form.validate()
       if (!this.valid) {
         return
       }
       this.loading = true
       try {
-        const {data: {data}} = await this.$axios.put('auth', this.form);
-        this.$auth.updateUser(data);
+        const {
+          data: { data },
+        } = await this.$axios.put('auth', this.form)
+        this.$auth.updateUser(data)
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.error(err);
+        console.error(err)
       }
-      this.loading = false;
+      this.loading = false
     },
-  }
+  },
 }
 </script>
 
 <style>
-
 </style>
