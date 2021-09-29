@@ -40,9 +40,6 @@
                 </span>
               </div>
             </template>
-            <template #[`item.placement`]="{ item }">
-              <span class="boxed"> {{ item.placement }}% Placement </span>
-            </template>
             <template #[`item.followers`]="{ item }">
               <span class="boxed"> {{ item.followers }} Followers </span>
             </template>
@@ -67,7 +64,6 @@ export default {
     return {
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'Placement', value: 'placement' },
         { text: 'Followers', value: 'followers' },
         { text: 'Action', value: 'action', align: 'center' },
       ],
