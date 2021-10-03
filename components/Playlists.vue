@@ -34,9 +34,14 @@
                     >mdi-check-decagram</v-icon
                   >
                   <br />
-                  <span class="small">{{
-                    item.genres.map((genre) => genre.name).join(', ')
-                  }}</span>
+                  <span class="small">{{ item.username }}</span>
+                  <br />
+                  <span class="small"
+                    >Genres:
+                    {{
+                      item.genres.map((genre) => genre.name).join(', ')
+                    }}</span
+                  >
                 </span>
               </div>
             </template>
@@ -77,8 +82,8 @@ export default {
     return {
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'Placement', value: 'placement' },
-        { text: 'Followers', value: 'followers' },
+        { text: 'Placement', value: 'placement', width: '20%' },
+        { text: 'Followers', value: 'followers', width: '20%' },
         { text: 'Action', value: 'action', align: 'center' },
       ],
       playlists: [],
@@ -162,6 +167,8 @@ export default {
 
 <style lang="scss" scoped>
 .name {
+  display: flex;
+  align-items: center;
   > img,
   span {
     display: inline-block;
@@ -187,5 +194,8 @@ export default {
       cursor: pointer;
     }
   }
+}
+.v-btn {
+  min-width: 130px !important;
 }
 </style>
