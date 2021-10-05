@@ -19,7 +19,9 @@
           <v-data-table
             :headers="headers"
             :items="playlists"
-            :items-per-page="25"
+            :items-per-page="15"
+            :options.sync="options"
+            :server-items-length="totalPlaylists"
             :loading="loading"
             class="row-pointer"
             @pagination="onPage"
@@ -82,14 +84,20 @@ export default {
     return {
       headers: [
         { text: 'Name', value: 'name' },
-        { text: 'Placement', value: 'placement', width: '20%' },
+        {
+          text: 'Placement',
+          value: 'placement',
+          width: '20%',
+          sortable: false,
+        },
         { text: 'Followers', value: 'followers', width: '20%' },
-        { text: 'Action', value: 'action', align: 'center' },
+        { text: 'Action', value: 'action', align: 'center', sortable: false },
       ],
       playlists: [],
       loading: false,
       currentPage: 0,
-      lastPage: 1,
+      options: {},
+      totalPlaylists: 0,
     }
   },
   computed: {
@@ -101,7 +109,13 @@ export default {
   watch: {
     filters: {
       handler() {
-        this.currentPage = 0
+        this.options.page = 0
+        this.getPlaylists()
+      },
+      deep: true,
+    },
+    options: {
+      handler() {
         this.getPlaylists()
       },
       deep: true,
@@ -117,14 +131,14 @@ export default {
       RESET_FILTERS: 'filters/RESET_FILTERS',
     }),
     async getPlaylists() {
-      this.currentPage = this.currentPage + 1
       this.loading = true
       const {
         data: { data },
       } = await this.$axios.get(
-        `curator/playlist?page=${this.currentPage}${this.generateQueryString()}`
+        `curator/playlist?${this.generateQueryString()}`
       )
-      this.playlists = data
+      this.playlists = data.playlists
+      this.totalPlaylists = data.items_count
       this.loading = false
     },
     generateQueryString() {
@@ -141,6 +155,20 @@ export default {
         } else if (this.filters[key] !== '' && this.filters[key] !== null) {
           queryString += `${key}=${this.filters[key]}&`
         }
+      }
+      const { sortBy, sortDesc, page, itemsPerPage } = this.options
+      if (sortBy) {
+        queryString += `sortBy=${sortBy}&sortDesc=${sortDesc}&`
+      }
+      if (page) {
+        queryString += `page=${page}&`
+      } else {
+        queryString += `page=1&`
+      }
+      if (itemsPerPage) {
+        queryString += `itemsPerPage=${itemsPerPage}&`
+      } else {
+        queryString += `itemsPerPage=25&`
       }
       queryString = queryString.substring(0, queryString.length - 1)
       return queryString ? `&${queryString}` : ''

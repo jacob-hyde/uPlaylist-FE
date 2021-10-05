@@ -31,7 +31,7 @@
             "
           >
             <span v-if="!loading">{{
-              subscription ? "Subscribe" : "Pay"
+              subscription ? 'Subscribe' : 'Pay'
             }}</span>
             <span v-if="loading">
               <i class="fas fa-circle-notch fa-spin" aria-hidden="true" />
@@ -73,8 +73,8 @@ export default {
     },
     paymentOptions: {
       type: Array,
-      default () {
-        return ["stripe", "paypal"]
+      default() {
+        return ['stripe', 'paypal']
       },
     },
     subscription: {
@@ -91,11 +91,11 @@ export default {
     },
     paymentUpdateUrl: {
       type: String,
-      default: "v1/payment",
+      default: 'v1/payment',
     },
     paymentUpdateMethod: {
       type: String,
-      default: "PUT",
+      default: 'PUT',
     },
     type: {
       type: String,
@@ -106,16 +106,16 @@ export default {
       default: null,
     },
   },
-  data () {
+  data() {
     return {
-      selected: "paypal",
+      selected: 'paypal',
       key: null,
       loading: null,
       validationErrors: null,
       selectedPaymentMethod: null,
       paymentMethodsRes: [],
       processingExistingPayment: false,
-      env: process.env.NODE_ENV === "production" ? "production" : "sandbox",
+      env: process.env.NODE_ENV === 'production' ? 'production' : 'sandbox',
       paypalClient: {
         sandbox: process.env.PAYPAL_CLIENT_ID,
         production: process.env.PAYPAL_CLIENT_ID,
@@ -123,7 +123,7 @@ export default {
     }
   },
   computed: {
-    paymentMethods () {
+    paymentMethods() {
       const results = []
       const uniqueCards = []
       this.paymentMethodsRes.forEach(function (item) {
@@ -139,33 +139,33 @@ export default {
       return results
     },
   },
-  mounted () {
+  mounted() {
     if (global === undefined) {
       // eslint-disable-next-line no-var
       global = window
     }
     elements = this.$stripe.elements()
-    if (this.paymentOptions.includes("stripe")) {
-      card = elements.create("card")
+    if (this.paymentOptions.includes('stripe')) {
+      card = elements.create('card')
       card.mount(this.$refs.card)
     }
   },
-  beforeDestroy () {
-    if (this.paymentOptions.includes("stripe")) {
+  beforeDestroy() {
+    if (this.paymentOptions.includes('stripe')) {
       card.destroy(this.$refs.card)
       this.card = undefined
     }
   },
   methods: {
-    paypalCreateOrder (data, actions) {
+    paypalCreateOrder(data, actions) {
       if (!this.canPay) {
-        this.$emit("payment-attempted")
+        this.$emit('payment-attempted')
         this.loading = false
         return
       }
       return this.$axios
         .post(
-          this.generateCreateOrderUrl("paypal"),
+          this.generateCreateOrderUrl('paypal'),
           this.paymentData,
           this.paymentConfig
         )
@@ -175,40 +175,40 @@ export default {
         })
         .catch((err) => this.throwError(err))
     },
-    paypalOnApprove (data, actions) {
+    paypalOnApprove(data, actions) {
       return this.updatePayment({ payer_id: data.payerID })
     },
-    async getExistingPaymentMethods () {
+    async getExistingPaymentMethods() {
       this.processingExistingPayment = true
       try {
         const response = await this.$axios.get(`v1/user/payment/methods`)
         this.paymentMethodsRes = response.data
       } catch (err) {
-        this.$noty.warning("Error Occured while processing request.")
+        this.$noty.warning('Error Occured while processing request.')
       }
       this.processingExistingPayment = false
     },
-    generateCreateOrderUrl (paymentProcessor) {
+    generateCreateOrderUrl(paymentProcessor) {
       this.loading = true
-      this.$emit("toggle-loading", true)
+      this.$emit('toggle-loading', true)
       let url = this.paymentUrl + `?payment=${paymentProcessor}`
       if (this.key) {
         url += `&key=${this.key}`
       }
       return url
     },
-    async updatePayment (postData, config = {}) {
+    async updatePayment(postData, config = {}) {
       const couponId =
         this.paymentData instanceof FormData
-          ? this.paymentData.get("coupon_id")
+          ? this.paymentData.get('coupon_id')
           : this.paymentData.coupon_id
       postData = { ...postData, ...this.getFacebookCookies() }
       postData.recurring = this.subscription
-      postData.coupon_id = couponId;
+      postData.coupon_id = couponId
       this.validationErrors = null
       const {
         data: { data: event },
-      } = await this.$axios.get("pixel-event")
+      } = await this.$axios.get('pixel-event')
       try {
         const {
           data: { data },
@@ -218,41 +218,41 @@ export default {
           data: postData,
           ...config,
         })
-        if (data.status !== "paid") {
+        if (data.status !== 'paid') {
           this.loading = false
-          this.validationErrors = data
-          this.$emit("payment-error", this.validationErrors)
+          this.validationErrors = data.status
+          this.$emit('payment-error', this.validationErrors)
           return
         }
         data.selected = this.selected
-        this.$emit("payment-success", data)
+        this.$emit('payment-success', data)
         this.$gtm.push({ event: this.type, value: this.price })
         this.$fb.track(
-          "Purchase",
-          { currency: "USD", value: this.price },
+          'Purchase',
+          { currency: 'USD', value: this.price },
           event.event_id
         )
         this.loading = false
       } catch (err) {
         this.loading = false
-        this.validationErrors = err
-        this.$emit("toggle-loading", false)
+        this.validationErrors = 'Anknown error has occured'
+        this.$emit('toggle-loading', false)
         this.$sentry.captureException(err)
       }
-      this.$emit("toggle-loading", false)
+      this.$emit('toggle-loading', false)
     },
-    async doStripePayment () {
-      this.selected = "stripe"
+    async doStripePayment() {
+      this.selected = 'stripe'
       const cardOptions = {}
-      let paymentApiUrl = ""
+      let paymentApiUrl = ''
       this.validationErrors = null
       try {
-          cardOptions.payment_method = {
-            card,
-          }
-          paymentApiUrl = this.generateCreateOrderUrl("stripe")
+        cardOptions.payment_method = {
+          card,
+        }
+        paymentApiUrl = this.generateCreateOrderUrl('stripe')
         if (!this.canPay) {
-          this.$emit("payment-attempted")
+          this.$emit('payment-attempted')
           this.loading = false
           return
         }
@@ -264,11 +264,11 @@ export default {
         const responseData = response.data.data
         if (
           // eslint-disable-next-line no-prototype-builtins
-          responseData.hasOwnProperty("success") &&
+          responseData.hasOwnProperty('success') &&
           responseData.success === false
         ) {
           // eslint-disable-next-line no-prototype-builtins
-          if (responseData.hasOwnProperty("error_detail")) {
+          if (responseData.hasOwnProperty('error_detail')) {
             this.validationErrors = responseData.error_detail
             this.loading = false
           }
@@ -276,32 +276,34 @@ export default {
           this.key = response.data.data.key
           const paymentId = response.data.data.payment_id
           // TODO -- do we need the variable paymentIntent here?
-          const { error } =
-            await this.$stripe.confirmCardPayment(paymentId, cardOptions)
+          const { error } = await this.$stripe.confirmCardPayment(
+            paymentId,
+            cardOptions
+          )
           if (error) {
             this.loading = false
             this.validationErrors = error.message
-            this.$emit("payment-error", error)
-            this.$emit("toggle-loading", false)
+            this.$emit('payment-error', error)
+            this.$emit('toggle-loading', false)
             return
           }
           this.updatePayment({})
         }
       } catch (err) {
-        this.$emit("payment-error", err)
+        this.$emit('payment-error', err)
         this.loading = false
-        this.$emit("toggle-loading", false)
+        this.$emit('toggle-loading', false)
         this.$sentry.captureException(err)
       }
       this.processingExistingPayment = false
     },
-    async doStripeRecurringPayment () {
+    async doStripeRecurringPayment() {
       this.validationErrors = null
-      this.selected = "stripe"
+      this.selected = 'stripe'
       const {
         data: { data },
       } = await this.$axios.post(
-        this.generateCreateOrderUrl("stripe"),
+        this.generateCreateOrderUrl('stripe'),
         this.paymentData,
         this.paymentConfig
       )
@@ -329,7 +331,7 @@ export default {
 .disabled {
   position: relative;
   &:after {
-    content: " ";
+    content: ' ';
     display: block;
     position: absolute;
     width: 100%;
@@ -359,7 +361,7 @@ export default {
   transition: box-shadow 150ms ease;
 }
 .StripePayment label {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
   color: #3d2151;
 }
 .StripeElement--focus {
