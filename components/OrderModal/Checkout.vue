@@ -55,6 +55,8 @@
           <div v-if="total" class="row flex-column total-price-parent">
             <div class="col">
               <p class="text-right total-price p-2 m-0">
+                Fee: {{ fee | centsToDollar }}
+                <br />
                 Total Price: {{ total | centsToDollar }}
               </p>
             </div>
@@ -103,8 +105,11 @@ export default {
         return accum
       }, 0)
     },
+    fee() {
+      return this.subTotal * 0.3 + 50
+    },
     total() {
-      return this.subTotal
+      return this.subTotal + this.subTotal * 0.3 + 50
     },
     paymentData() {
       const playlistIds = this.playlists.reduce((accum, val) => {

@@ -51,6 +51,7 @@ export default {
 		'plugins/common',
 		'@/plugins/filters.js',
 		'plugins/validationMixin',
+		'@/plugins/gtm.js',
 		{ src: '~/plugins/paypal.js', ssr: false, mode: 'client' },
 		{ src: '~/plugins/persistedState.js', ssr: false },
 		{ src: '~/plugins/phoneInput.js' },
@@ -74,6 +75,7 @@ export default {
 		'@nuxtjs/axios',
 		'@nuxtjs/toast',
 		'@nuxtjs/auth-next',
+		'@nuxtjs/gtm',
 		'@nuxtjs/sentry',
 		[
 			'nuxt-stripe-module',
@@ -93,6 +95,12 @@ export default {
 			}
 		]
 	],
+
+	gtm: {
+		enabled: process.env.NODE_ENV !== 'development',
+		debug: process.env.NODE_ENV === 'development',
+		pageTracking: true
+	},
 
 	axios: {
 		baseURL: process.env.API_URL
