@@ -4,6 +4,11 @@
       <v-card-title>
         <span class="headline">Promote Playlist</span>
       </v-card-title>
+      <v-card-subtitle>
+        $10 per day to have your playlist show up as a featured playist
+        <br />
+        <strong>ONLY ONE FEATURED PLAYLIST SPOT PER DAY, BOOK NOW</strong>
+      </v-card-subtitle>
       <v-card-text>
         <v-date-picker
           v-model="date"
@@ -13,7 +18,7 @@
           v-if="date"
           payment-url="curator/playlist/promote"
           payment-update-url="payment"
-          :payment-data="{id: id, date: date}"
+          :payment-data="{ id: id, date: date }"
           @payment-success="onPaymentSuccess"
         />
       </v-card-text>
@@ -22,44 +27,50 @@
 </template>
 
 <script>
-import moment from 'moment';
-import Payment from '@/components/Payment.vue';
+import moment from 'moment'
+import Payment from '@/components/Payment.vue'
 export default {
   components: {
-    Payment
+    Payment,
   },
   props: {
     id: {
       type: Number,
       default: null,
-    }
+    },
   },
-  data () {
+  data() {
     return {
       dialog: false,
       date: null,
       datesTaken: [],
     }
   },
-  async created () {
-    const {data: {data: {dates}}} = await this.$axios.get('curator/playlist/featured-dates')
-    this.datesTaken = dates;
+  async created() {
+    const {
+      data: {
+        data: { dates },
+      },
+    } = await this.$axios.get('curator/playlist/featured-dates')
+    this.datesTaken = dates
   },
   methods: {
-    openModal () {
-      this.dialog = true;
+    openModal() {
+      this.dialog = true
     },
-    disabledDates (date) {
-      return !this.datesTaken.includes(moment(date).format('YYYY-MM-DD')) && date >= new Date().toISOString().substr(0, 10)
+    disabledDates(date) {
+      return (
+        !this.datesTaken.includes(moment(date).format('YYYY-MM-DD')) &&
+        date >= new Date().toISOString().substr(0, 10)
+      )
     },
-    onPaymentSuccess () {
-      this.dialog = false;
+    onPaymentSuccess() {
+      this.dialog = false
       this.$toast.success('Purchase Successful!')
     },
-  }
+  },
 }
 </script>
 
 <style>
-
 </style>
