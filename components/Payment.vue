@@ -74,7 +74,7 @@ export default {
     paymentOptions: {
       type: Array,
       default() {
-        return ['stripe', 'paypal']
+        return ['stripe']
       },
     },
     subscription: {
