@@ -12,7 +12,12 @@ export default {
 		meta: [
 			{ charset: 'utf-8' },
 			{ name: 'viewport', content: 'width=device-width, initial-scale=1' },
-			{ hid: 'description', name: 'description', content: '' },
+			{
+				hid: 'description',
+				name: 'description',
+				content:
+					'Uplaylist is the premier playlisting provider for trusted, easy, and fast music marketing through spotify playlists'
+			},
 			{ name: 'format-detection', content: 'telephone=no' },
 			{ name: 'facebook-domain-verification', content: 'pua667apc5fxlfvp1mogi2u616vmqh' }
 		],
