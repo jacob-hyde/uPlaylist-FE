@@ -93,7 +93,7 @@
             >Dislaimer</a
           >
           |
-          <a href="mailto:support@uplaylist.com">Contact</a>
+          <nuxt-link to="/contact">Contact</nuxt-link>
         </v-col>
       </v-row>
     </v-footer>
