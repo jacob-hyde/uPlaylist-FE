@@ -37,6 +37,7 @@
             :payment-method-url="paymentUrl"
             type="curatorcheckout"
             :price="Math.floor(total) / 100"
+            :payment-options="paymentOptions"
             payment-update-url="payment"
             @payment-success="onPaymentSuccess"
             @payment-error="onPaymentError"
@@ -135,6 +136,12 @@ export default {
         }
       })
       return playlistMismatches
+    },
+    paymentOptions() {
+      if (this.$route.path !== '/playlists') {
+        return ['stripe']
+      }
+      return ['stripe', 'paypal']
     },
   },
   async created() {
