@@ -19,9 +19,16 @@
                 <li>Prices start at $5 instead of $1</li>
               </ul>
               <div class="text-center mt-4">
-                <v-btn v-if="!$auth.user.subscribed" color="primary" @click="dialog = true">Sign Up</v-btn>
+                <v-btn
+                  v-if="!$auth.user.subscribed"
+                  color="primary"
+                  @click="dialog = true"
+                  >Sign Up</v-btn
+                >
                 <v-btn v-else color="red" @click="cancelSubscription">{{
-                  $auth.user.subscription_ends_at ? 'Ends ' + formatEndDate($auth.user.subscription_ends_at) : 'Cancel Subscription'
+                  $auth.user.subscription_ends_at
+                    ? 'Ends ' + formatEndDate($auth.user.subscription_ends_at)
+                    : 'Cancel Subscription'
                 }}</v-btn>
               </div>
             </v-card-text>
@@ -36,20 +43,23 @@
         </v-card-title>
         <v-card-text>
           <div class="my-5 d-flex justify-center">
-            <v-checkbox
-              v-model="agreeStatus"
-              required
-            >
+            <v-checkbox v-model="agreeStatus" required>
               <div slot="label">
                 I agree with the
-                <a :href="termConditionsUrl" target="_blank" @click.stop>&nbsp;Terms and Conditions</a> and <a :href="policyUrl" target="_blank" @click.stop>Privacy Policy</a>
+                <a :href="termConditionsUrl" target="_blank" @click.stop
+                  >&nbsp;Terms and Conditions</a
+                >
+                and
+                <a :href="policyUrl" target="_blank" @click.stop
+                  >Privacy Policy</a
+                >
               </div>
             </v-checkbox>
           </div>
           <payment
             :disabled="!agreeStatus"
-             payment-url="subscription/plan"
-            :payment-data="{plan_id: 1}"
+            payment-url="subscription/plan"
+            :payment-data="{ plan_id: 1 }"
             :subscription="true"
             :payment-options="[`stripe`]"
             type="curatorsubscription"
@@ -64,39 +74,43 @@
 </template>
 
 <script>
-import moment from 'moment';
-import Payment from '@/components/Payment';
+import moment from 'moment'
+import Payment from '@/components/Payment'
 export default {
   components: {
     Payment,
   },
   layout: 'dashboard',
   middleware: 'auth',
-  data () {
+  data() {
     return {
       dialog: false,
       agreeStatus: false,
-      termConditionsUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      policyUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'
+      termConditionsUrl:
+        'https://app.termly.io/document/privacy-policy/da5b475c-2858-4d7f-8310-57130372a10d',
+      policyUrl:
+        'https://app.termly.io/document/privacy-policy/da5b475c-2858-4d7f-8310-57130372a10d',
     }
   },
   methods: {
-    async cancelSubscription () {
+    async cancelSubscription() {
       try {
-        await this.$axios.delete('subscription/' + this.$auth.user.subscription_id)
-        await this.$auth.fetchUser();
-        this.$toast.success('Subscription Canceled!');
+        await this.$axios.delete(
+          'subscription/' + this.$auth.user.subscription_id
+        )
+        await this.$auth.fetchUser()
+        this.$toast.success('Subscription Canceled!')
       } catch (err) {
         // eslint-disable-next-line no-console
-        console.log(err);
+        console.log(err)
       }
     },
-    formatEndDate (date) {
-      return moment(date).format('MMMM Do YYYY');
+    formatEndDate(date) {
+      return moment(date).format('MMMM Do YYYY')
     },
-    onPaymentSuccess () {
-      this.$auth.fetchUser();
-      this.$toast.success('Subscription Started!');
+    onPaymentSuccess() {
+      this.$auth.fetchUser()
+      this.$toast.success('Subscription Started!')
     },
   },
 }
