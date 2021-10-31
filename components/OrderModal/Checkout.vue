@@ -138,9 +138,6 @@ export default {
       return playlistMismatches
     },
     paymentOptions() {
-      if (this.$route.path !== '/playlists') {
-        return ['stripe']
-      }
       return ['stripe', 'paypal']
     },
   },
