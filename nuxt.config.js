@@ -83,6 +83,7 @@ export default {
 		'@nuxtjs/auth-next',
 		'@nuxtjs/gtm',
 		'@nuxtjs/sentry',
+		'@nuxtjs/sitemap',
 		[
 			'nuxt-stripe-module',
 			{
@@ -168,6 +169,29 @@ export default {
 					error: colors.deepOrange.accent4,
 					success: colors.green.accent3
 				}
+			}
+		}
+	},
+
+	sitemap: {
+		hostname: 'https://uplaylist.com',
+		gzip: true,
+		async routes() {
+			const axios = require('axios');
+			const routesArray = [];
+			try {
+				const { data: { data } } = await axios.get(process.env.API_URL + 'curator/playlist/sitemap');
+				data.playlists.forEach((element) => {
+					routesArray.push({
+						url: `/playlist/${element.slug}`,
+						changefreq: 'daily',
+						priority: 0.7
+					});
+				});
+				return routesArray;
+			} catch (error) {
+				// eslint-disable-next-line no-console
+				console.error(error);
 			}
 		}
 	},
