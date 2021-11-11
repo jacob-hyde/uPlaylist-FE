@@ -84,6 +84,7 @@ export default {
 		'@nuxtjs/gtm',
 		'@nuxtjs/sentry',
 		'@nuxtjs/sitemap',
+		'@nuxtjs/robots',
 		[
 			'nuxt-stripe-module',
 			{
