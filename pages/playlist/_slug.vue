@@ -75,6 +75,20 @@ export default {
       console.error(err)
     }
   },
+  head() {
+    const genres = this.playlist.genres.reduce((accum, v) => {
+      return accum + v.name + ', '
+    }, '')
+    return {
+      title: `${this.playlist.name} - uPlaylist`,
+      meta: [
+        {
+          name: 'description',
+          content: `${this.playlist.name} - ${this.playlist.followers} Followers - ${genres}`,
+        },
+      ],
+    }
+  },
   computed: {
     ...mapGetters({
       cart: 'cart/getCart',
